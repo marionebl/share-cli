@@ -12,6 +12,7 @@ const http = require('http');
 const os = require('os');
 const path = require('path');
 const url = require('url');
+const util = require('util');
 
 const copyPaste = require('copy-paste');
 const chalk = require('chalk');
@@ -20,6 +21,8 @@ const meow = require('meow');
 const mime = require('mime');
 const portscanner = require('portscanner');
 const generate = require('project-name-generator');
+
+const log = util.debuglog('share-cli');
 
 const cli = meow(`
 	Usage
@@ -45,14 +48,17 @@ const stdin = process.stdin;
 
 // Kill process after 5 minutes of inactivity
 function resetTimer() {
+	log('Reseting activitiy timer');
 	killTimer();
 	setTimer();
 }
 
 function setTimer() {
+	log('Setting activitiy timer, timing out after 5 minutes');
 	__timer = setTimeout(() => {
+		log('Timeout without after 5 minutes without activitiy, killing process');
 		process.exit(0);
-	}, 30000);
+	}, 300000);
 }
 
 function killTimer() {
@@ -130,19 +136,39 @@ function getOpenPort() {
  * @param {String} [options.filePath] - Absolute path of file to read
  * @param {String} [options.fileName] - Basename of file to read, defaults to path.basename(option.filePath)
  *
- * @return {File}
+ * @return {Promise<File>}
  */
 function getFile(options) {
-	const stream = options.isStdin ?
-		stdin : fs.createReadStream(options.filePath);
+	return new Promise((resolve, reject) => {
+		const stream = options.isStdin ?
+			stdin : fs.createReadStream(options.filePath);
 
-	const name = options.isStdin ?
-		options.fileName : path.basename(options.filePath);
+		const name = options.isStdin ?
+			options.fileName : path.basename(options.filePath);
 
-	return {
-		stream,
-		name
-	};
+		if (options.isStdin) {
+			return resolve({
+				stream,
+				name,
+				size: null,
+				ino: null,
+				mtime: null
+			});
+		}
+
+		fs.stat(options.filePath, (error, stat) => {
+			if (error) {
+				return reject(error);
+			}
+			resolve({
+				stream,
+				name,
+				size: stat.size,
+				ino: stat.ino,
+				mtime: Date.parse(stat.mtime)
+			});
+		});
+	});
 }
 
 /**
@@ -164,22 +190,43 @@ function serve(options) {
 				.split('/')
 				.filter(Boolean)[0];
 
-			if (id === options.id) {
+			// Only HEAD and GET are allowed
+			if (['GET', 'HEAD'].indexOf(request.method) === -1) {
+				response.writeHead(405);
+				return response.end('Method not Allowed.');
+			}
+
+			if (id !== options.id) {
+				response.writeHead(404);
+				return response.end('Not found');
+			}
+
+			resetTimer();
+			const downloadName = file.name || options.id;
+			response.setHeader('Content-Type', mime.lookup(downloadName));
+
+			if (file.size) {
+				response.setHeader('Content-Length', file.size);
+			}
+
+			// Do not send a body for HEAD requests
+			if (request.method === 'HEAD') {
+				response.setHeader('Connection', 'close');
+				return response.end();
+			}
+
+			response.setHeader('Content-Disposition', `attachment; filename=${downloadName}`);
+
+			file.stream.on('data', () => {
 				resetTimer();
-				const downloadName = file.name || options.id;
-				response.setHeader('Content-Type', mime.lookup(downloadName));
-				response.setHeader('Content-Disposition', `attachment; filename=${downloadName}`);
+			});
 
-				file.stream.pipe(response);
-
-				// Kill the process when download completed
-				file.stream.on('close', () => {
+			file.stream.pipe(response)
+				.on('finish', () => {
+					log('Download completed, killing process');
+					// Kill the process when download completed
 					process.exit(0);
 				});
-			} else {
-				response.writeHead(404);
-				response.end('Not found');
-			}
 		});
 
 		server.on('error', reject);
@@ -236,14 +283,16 @@ function main(filePath, args) {
 		const isStdin = stdin.isTTY !== true && typeof filePath === 'undefined';
 
 		// Get a file object
-		const file = getFile({
+		const gettingFile = getFile({
 			isStdin,
 			filePath,
 			fileName: args.name
 		});
 
-		const address = serveFile(file);
-		resolve(address);
+		gettingFile
+			.then(serveFile)
+			.then(resolve)
+			.catch(reject);
 	});
 }
 
