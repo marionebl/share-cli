@@ -1,0 +1,9 @@
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_width = 2
+
+[*.js]
+indent_style = tab
