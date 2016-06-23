@@ -1,6 +1,6 @@
 {
   "name": "share-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Quickly share files from command line to your local network",
   "bin": {
     "share": "./cli.js"
@@ -33,7 +33,7 @@
   "devDependencies": {
     "xo": "^0.16.0"
   },
-	"engines": {
-		"node": ">=4"
-	}
+  "engines": {
+    "node": ">=4"
+  }
 }
