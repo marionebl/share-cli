@@ -40,6 +40,12 @@ npm install -g share-cli
     http://192.168.1.1:1338/important-downtown
 ```
 
+
+## Related projects
+
+*  [remote-share-cli](https://github.com/marionebl/remote-share-cli) - Quickly share files from your command line with the world
+
+
 ---
 share-cli is built by [Mario Nebl](https://github.com/marionebl) and released
 under the [MIT](./license.md) license.
