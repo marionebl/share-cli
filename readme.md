@@ -1,6 +1,8 @@
 > Quickly share files from command line to your local network
 
-![share-cli Demo](./demo.gif)
+<p align="center">
+  <img width="750" src="https://cdn.rawgit.com/marionebl/share-cli/3d07ba5c/demo.svg">
+</p>
 
 # share-cli
 
@@ -35,7 +37,7 @@ npm install -g share-cli
   Examples
     $ share shared.png
     http://192.168.1.1:1337/unequal-wish
- 
+
     $ cat shared.png | share --name=shared.png
     http://192.168.1.1:1338/important-downtown
 ```
