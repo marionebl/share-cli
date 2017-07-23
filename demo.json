@@ -1,0 +1,434 @@
+{
+  "version": 1,
+  "width": 95,
+  "height": 27,
+  "duration": 31.505594,
+  "command": null,
+  "title": null,
+  "env": {
+    "TERM": "ansi",
+    "SHELL": "/usr/local/bin/fish"
+  },
+  "stdout": [
+    [
+      0.40362,
+      "\u001b]7;file://marneb-macbook.fritz.box/Users/marneb/Projects/labs/share-cli\u0007"
+    ],
+    [
+      0.058681,
+      "\u001b[1m\u001b[30m⏎\u001b[0;10m                                                                                             \r⏎ \r\u001b[2K\u001b[34m~/Projects/labs/share-cli\u001b[30m\u001b[0;10m \u001b[90mmaster*\u001b[30m\u001b[0;10m\t\u001b[36m\u001b[30m\u001b[0;10m\r\n\u001b[32m❯\u001b[30m\u001b[0;10m \u001b[K"
+    ],
+    [
+      0.520709,
+      "s"
+    ],
+    [
+      0.000141,
+      "\u001b[D\u001b[31m\u001b[1ms\u001b[0;10m"
+    ],
+    [
+      0.012727,
+      "\u001b[33m2p \u001b[3D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.178631,
+      "\u001b[31m\u001b[1mh\u001b[0;10m\u001b[K"
+    ],
+    [
+      0.000234,
+      "\u001b[D\u001b[D\u001b[35msh\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.006959,
+      "\u001b[33m \u001b[D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.040764,
+      "\u001b[35ma\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.00026,
+      "\u001b[3D\u001b[31m\u001b[1msha\u001b[0;10m"
+    ],
+    [
+      0.007071,
+      "\u001b[33mr \u001b[D\u001b[D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.112698,
+      "\u001b[31m\u001b[1mr\u001b[0;10m\u001b[33m \u001b[D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.000248,
+      "\u001b[4D\u001b[35mshar\u001b[33m \u001b[D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.063763,
+      "\u001b[35me\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.006914,
+      "\u001b[33m \u001b[D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.210521,
+      "\u001b[35m \u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.000261,
+      "\u001b[D "
+    ],
+    [
+      0.310777,
+      "r"
+    ],
+    [
+      0.000305,
+      "\u001b[D\u001b[36m\u001b[4mr\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.003192,
+      "\u001b[33meadme.md \u001b[9D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.116124,
+      "\u001b[36m\u001b[4ma\u001b[30m\u001b[0;10m\u001b[K"
+    ],
+    [
+      0.00022,
+      "\u001b[D\u001b[D\u001b[36mra\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.759635,
+      "\u001b[D\u001b[K"
+    ],
+    [
+      0.000134,
+      "\u001b[D\u001b[36m\u001b[4mr\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.08009,
+      "\u001b[36m\u001b[4me\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.001716,
+      "\u001b[33madme.md \u001b[8D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.118224,
+      "\u001b[36m\u001b[4ma\u001b[33m\u001b[mdme.md \u001b[7D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.104069,
+      "\u001b[36m\u001b[4md\u001b[33m\u001b[mme.md \u001b[6D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.871975,
+      "\u001b[36m\u001b[4mme.md \u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.000198,
+      "\u001b[10D\u001b[36mreadme.md\u001b[30m\u001b[0;10m "
+    ],
+    [
+      1.042925,
+      "&"
+    ],
+    [
+      0.000255,
+      "\u001b[D\u001b[32m&\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.684145,
+      "\r\n\u001b[30"
+    ],
+    [
+      3.2e-05,
+      "m\u001b[0;10m"
+    ],
+    [
+      0.080443,
+      "\u001b[1m\u001b[30m⏎\u001b[0;10m                                                                                             \r⏎ \r\u001b[2K\r\n\u001b[34m~/Projects/labs/share-cli\u001b[30m\u001b[0;10m \u001b[90mmaster*\u001b[30m\u001b[0;10m\t\u001b[36m\u001b[30m\u001b[0;10m\r\n\u001b[32m❯\u001b[30m\u001b[0;10m \u001b[K"
+    ],
+    [
+      0.513758,
+      "http://192.168.178.26:1338/judicious-slip\r\n"
+    ],
+    [
+      1.813915,
+      "\r"
+    ],
+    [
+      3.4e-05,
+      "\r"
+    ],
+    [
+      0.000204,
+      "\r\n\u001b[34m~/Projects/labs/share-cli\u001b[30m\u001b[0;10m \u001b[90mmaster*\u001b[30m\u001b[0;10m\t\u001b[36m\u001b[30m\u001b[0;10m\r\n\u001b[32m❯\u001b[30m\u001b[0;10m \u001b[K\r\n\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.050459,
+      "\u001b[1m\u001b[30m⏎\u001b[0;10m                                                                                             \r⏎ \r\u001b[2K"
+    ],
+    [
+      0.000116,
+      "\r\n\u001b[34m~/Projects/labs/share-cli\u001b[30m\u001b[0;10m \u001b[90mmaster*\u001b[30m\u001b[0;10m\t\u001b[36m\u001b[30m\u001b[0;10m\r\n\u001b[32m❯\u001b[30m\u001b[0;10m \u001b[K"
+    ],
+    [
+      3.02191,
+      "c"
+    ],
+    [
+      0.000193,
+      "\u001b[D\u001b[31m\u001b[1mc\u001b[0;10m"
+    ],
+    [
+      0.000145,
+      "\u001b[33mlear\u001b[4D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.143546,
+      "\u001b[31m\u001b[1mu\u001b[0;10m\u001b[K"
+    ],
+    [
+      0.000215,
+      "\u001b[D\u001b[D\u001b[35mcu\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.00036,
+      "\u001b[33mrl https://learnedchance.localtunnel.me\u001b[39D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.127844,
+      "\u001b[35mr\u001b[33ml https://learnedchance.localtunnel.me\u001b[38D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.000518,
+      "\u001b[3D\u001b[31m\u001b[1mcur\u001b[0;10m\u001b[33ml https://learnedchance.localtunnel.me\u001b[38D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.111929,
+      "\u001b[31m\u001b[1ml\u001b[0;10m\u001b[33m https://learnedchance.localtunnel.me\u001b[37D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.000524,
+      "\u001b[4D\u001b[35mcurl\u001b[33m https://learnedchance.localtunnel.me\u001b[37D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.238708,
+      "\u001b[35m \u001b[33mhttps://learnedchance.localtunnel.me\u001b[36D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.000389,
+      "\u001b[D \u001b[33mhttps://learnedchance.localtunnel.me\u001b[36D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.176108,
+      "h\u001b[33mttps://learnedchance.localtunnel.me\u001b[35D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.00064,
+      "\u001b[D\u001b[36mh\u001b[33mttps://learnedchance.localtunnel.me\u001b[35D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.087626,
+      "\u001b[36mt\u001b[33mtps://learnedchance.localtunnel.me\u001b[34D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.215315,
+      "\u001b[36mt\u001b[33mps://learnedchance.localtunnel.me\u001b[33D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.544658,
+      "\u001b[36mp\u001b[33ms://learnedchance.localtunnel.me\u001b[32D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.37529,
+      "\u001b[36m:\u001b[30m\u001b[0;10m\u001b[K"
+    ],
+    [
+      0.00162,
+      "\u001b[33m//localhost:9000\u001b[16D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.374352,
+      "\u001b[36m/\u001b[33m/localhost:9000\u001b[15D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.2,
+      "\u001b[36m/\u001b[33mlocalhost:9000\u001b[14D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.632714,
+      "\u001b[36m1\u001b[30m\u001b[0;10m\u001b[K"
+    ],
+    [
+      0.207268,
+      "\u001b[36m9\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.080108,
+      "\u001b[36m2\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.607922,
+      "\u001b[36m.\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.279995,
+      "\u001b[36m1\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.568268,
+      "\u001b[36m6\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.411527,
+      "\u001b[36m8\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.340282,
+      "\u001b[36m.\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.688058,
+      "\u001b[36m1\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.176312,
+      "\u001b[36m7\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.19965,
+      "\u001b[36m8\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.312166,
+      "\u001b[36m.\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.527943,
+      "\u001b[36m2\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.247996,
+      "\u001b[36m6\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.53627,
+      "\u001b[36m:\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.002056,
+      "\u001b[33mcli.js \u001b[7D\u001b[30m\u001b[0;10m"
+    ],
+    [
+      1.06979,
+      "\u001b[36m1\u001b[30m\u001b[0;10m\u001b[K"
+    ],
+    [
+      0.144701,
+      "\u001b[36m3\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.167199,
+      "\u001b[36m3\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.800073,
+      "\u001b[36m8\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.896107,
+      "\u001b[36m/\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.552996,
+      "\u001b[36mj\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.190938,
+      "\u001b[36mu\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.952815,
+      "\u001b[36md\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.23136,
+      "\u001b[36mi\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.303895,
+      "\u001b[36mc\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.539672,
+      "\u001b[36mi\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.201077,
+      "\u001b[36mo\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.235405,
+      "\u001b[36mu\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.104072,
+      "\u001b[36ms\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.272316,
+      "\u001b[36m-\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.474584,
+      "\u001b[36ms\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.421044,
+      "\u001b[36ml\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.216056,
+      "\u001b[36mi\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.272664,
+      "\u001b[36mp\u001b[30m\u001b[0;10m"
+    ],
+    [
+      0.304381,
+      "\r\n\u001b"
+    ],
+    [
+      5.5e-05,
+      "[30m\u001b[0;10m"
+    ],
+    [
+      0.04125,
+      "> Quickly share files from command line to your local network\r\n\r\n![share-cli Demo](./demo.gif)\r\n\r\n# share-cli\r\n\r\n* :rocket: Dead Simple\r\n* :sparkles: Just works\r\n* :lock: Local network only\r\n\r\nshare-cli exposes single files to your LAN via http, either from stdin or a given file.\r\nThe exposing address is copied to your clipboard automatically.\r\n\r\nAfer a complete download or 5 minutes of inactivity share-cli closes automatically.\r\n\r\n## Installation\r\n\r\n```\r\nnpm install -g share-cli\r\n```\r\n\r\n## Usage\r\n\r\n```\r\n❯ share --help\r\n\r\n  Quickly share files from command line to your local network\r\n\r\n  Usage\r\n    $ share [file]\r\n\r\n  Options\r\n    -n, --name Forced download name of the file\r\n\r\n  Examples\r\n    $ share shared.png\r\n    http://192.168.1.1:1337/unequal-wish\r\n \r\n    $ cat shared.png | share --name=shared.png\r\n    http://192.168.1.1:1338/important-downtown\r\n```\r\n\r\n\r\n## Related projects\r\n\r\n*  [remote-share-cli](https://github.com/marionebl/remote-share-cli) - Quickly share files from your command line with the worl"
+    ],
+    [
+      0.000434,
+      "d\r\n\r\n\r\n---\r\nshare-cli is built by [Mario Nebl](https://github.com/marionebl) and released\r\nunder the [MIT](./license.md) license.\r\n"
+    ],
+    [
+      0.056436,
+      "\u001b[1m\u001b[30m⏎\u001b[0;10m                                                                                             \r⏎ \r\u001b[2K"
+    ],
+    [
+      0.000219,
+      "\r\n\u001b[34m~/Projects/labs/share-cli\u001b[30m\u001b[0;10m \u001b[90mmaster*\u001b[30m\u001b[0;10m\t\u001b[36m\u001b[30m\u001b[0;10m\r\n\u001b[32m❯\u001b[30m\u001b[0;10m \u001b[K"
+    ],
+    [
+      3.43689,
+      "\r\n\u001b[30m\u001b[0;"
+    ],
+    [
+      3.3e-05,
+      "10m\u001b[30m\u001b[0;10m"
+    ]
+  ]
+}
