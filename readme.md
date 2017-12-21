@@ -5,7 +5,6 @@
 </p>
 
 > Demo created with [svg-term-cli](https://github.com/marionebl/svg-term-cli):
-
 > `cat demo.json | svg-term -o demo.svg`
 
 # share-cli
