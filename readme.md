@@ -1,8 +1,12 @@
 > Quickly share files from command line to your local network
 
 <p align="center">
-  <img width="750" src="https://cdn.rawgit.com/marionebl/share-cli/3d07ba5c/demo.svg">
+  <img width="750" src="https://cdn.rawgit.com/marionebl/share-cli/299fa583/demo.svg">
 </p>
+
+> Demo created with [svg-term-cli](https://github.com/marionebl/svg-term-cli):
+
+> `cat demo.json | svg-term -o demo.svg`
 
 # share-cli
 
