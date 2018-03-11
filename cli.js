@@ -13,15 +13,31 @@ const os = require('os');
 const path = require('path');
 const url = require('url');
 const util = require('util');
+const crypto = require('crypto');
+const EventEmitter = require('events').EventEmitter;
 
-const copyPaste = require('copy-paste');
+const stat = util.promisify(fs.stat);
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
+const randomBytes = util.promisify(crypto.randomBytes);
+
 const chalk = require('chalk');
+const copyPaste = require('copy-paste');
+const execa = require('execa');
 const fp = require('lodash/fp');
+const generate = require('project-name-generator');
+const globby = require('globby');
+const localtunnel = require('localtunnel');
 const meow = require('meow');
 const mime = require('mime');
 const portscanner = require('portscanner');
-const generate = require('project-name-generator');
+const streamToBuffer = require('stream-to-buffer');
+const tempy = require("tempy");
+const progressStream = require("progress-stream");
+const ora = require("ora");
+const progressString = require("progress-string");
 
+const toBuffer = util.promisify(streamToBuffer);
 const log = util.debuglog('share-cli');
 
 const cli = meow(`
@@ -43,29 +59,7 @@ const cli = meow(`
 	}
 });
 
-let __timer = null;
 const stdin = process.stdin;
-
-// Kill process after 5 minutes of inactivity
-function resetTimer() {
-	log('Reseting activitiy timer');
-	killTimer();
-	setTimer();
-}
-
-function setTimer() {
-	log('Setting activitiy timer, timing out after 5 minutes');
-	__timer = setTimeout(() => {
-		log('Timeout without after 5 minutes without activitiy, killing process');
-		process.exit(0);
-	}, 300000);
-}
-
-function killTimer() {
-	if (__timer) {
-		clearTimeout(__timer);
-	}
-}
 
 /**
  * Copy input to clipboard
@@ -76,7 +70,7 @@ function copy(input) {
 	return new Promise((resolve, reject) => {
 		copyPaste.copy(`${input}\r\n`, (error) => {
 			if (error) {
-				return reject(error);
+				console.warn(`Failed adding url to clipboard: ${err.message}`);
 			}
 			resolve(input);
 		});
@@ -138,38 +132,48 @@ function getOpenPort() {
  *
  * @return {Promise<File>}
  */
-function getFile(options) {
-	return new Promise((resolve, reject) => {
-		const stream = options.isStdin ?
-			stdin : fs.createReadStream(options.filePath);
+async function getFile(options) {
+	options.spinner.text = "Preparing file";
+	const filePath = options.isStdin ? tempy.file() : options.filePath;
 
-		const name = options.isStdin ?
-			options.fileName : path.basename(options.filePath);
+	if (options.isStdin) {
+		await writeFile(filePath, toBuffer(stdin));
+	}
 
-		if (options.isStdin) {
-			return resolve({
-				stream,
-				name,
-				size: null,
-				ino: null,
-				mtime: null
-			});
-		}
+	const recursive = options.isStdin
+		? false
+		: (await stat(filePath)).isDirectory();
 
-		fs.stat(options.filePath, (error, stat) => {
-			if (error) {
-				return reject(error);
-			}
-			resolve({
-				stream,
-				name,
-				size: stat.size,
-				ino: stat.ino,
-				mtime: Date.parse(stat.mtime)
-			});
-		});
-	});
+	const zip = `${tempy.file()}.zip`;
+
+	await execa('zip', [
+		'-P', options.password,
+		recursive ? '-r' : '',
+		zip,
+		filePath
+	].filter(Boolean));
+
+	const size = (await stat(zip)).size;
+	const checksum = await getChecksum('sha1', zip);
+
+	options.spinner.succeed("Prepared file");
+	return {
+		path: zip,
+		size,
+		checksum,
+		password: options.password,
+	};
 }
+
+function getChecksum(hashName, path) {
+	return new Promise((resolve, reject) => {
+	  let hash = crypto.createHash(hashName);
+	  let stream = fs.createReadStream(path);
+	  stream.on('error', err => reject(err));
+	  stream.on('data', chunk => hash.update(chunk));
+	  stream.on('end', () => resolve(hash.digest('hex')));
+	});
+  }
 
 /**
  * Serve a File object on address with port on path id
@@ -182,13 +186,48 @@ function getFile(options) {
  * @return {Promise<Object>} - started server instance
  */
 function serve(options) {
-	return new Promise((resolve, reject) => {
-		const file = options.file;
+	options.spinner.text = "Starting server";
 
+	const file = options.file;
+
+	const emitter = new EventEmitter();
+
+	let connection;
+	let sent;
+
+	const connect = options.tunnel
+		? async () => {
+			options.spinner.text = `Starting tunnel`;
+			options.spinner.start();
+
+			const c = await tunnel(options.port, {subdomain: options.subdomain});
+			options.spinner.succeed(`Started tunnel`);
+
+			return {
+				once: emitter.once.bind(emitter),
+				on: emitter.on.bind(emitter),
+				url: c.url,
+				close: c.close.bind(c),
+				tunnel: c
+			};
+		}
+		: async () => ({
+			once: emitter.once.bind(emitter),
+			on: emitter.on.bind(emitter),
+			url: `http://${options.address}:${options.port}/${options.id}`,
+			close: () => {}
+		});
+
+	return new Promise((resolve, reject) => {
 		const server = http.createServer((request, response) => {
 			const id = url.parse(request.url).path
 				.split('/')
 				.filter(Boolean)[0];
+
+			if (request.headers['user-agent'].includes('facebookexternalhit')) {
+				response.writeHead(404);
+				return response.end('Not found');
+			}
 
 			// Only HEAD and GET are allowed
 			if (['GET', 'HEAD'].indexOf(request.method) === -1) {
@@ -196,18 +235,20 @@ function serve(options) {
 				return response.end('Method not Allowed.');
 			}
 
-			if (id !== options.id) {
+			const matches = options.tunnel
+				? true
+				: id === options.id;
+
+			if (!matches) {
 				response.writeHead(404);
 				return response.end('Not found');
 			}
 
-			resetTimer();
-			const downloadName = file.name || options.id;
-			response.setHeader('Content-Type', mime.lookup(downloadName));
-
-			if (file.size) {
-				response.setHeader('Content-Length', file.size);
-			}
+			response.writeHead(200, {
+				'Content-Disposition': `attachment;filename=${file.name || options.id}.zip`,
+				'Content-Length': file.size,
+				'Content-Type': 'application/zip'
+			});
 
 			// Do not send a body for HEAD requests
 			if (request.method === 'HEAD') {
@@ -215,24 +256,41 @@ function serve(options) {
 				return response.end();
 			}
 
-			response.setHeader('Content-Disposition', `attachment; filename=${downloadName}`);
+			emitter.emit('start');
+			const stream = fs.createReadStream(file.path);
 
-			file.stream.on('data', () => {
-				resetTimer();
+			let frame;
+
+			const progress = progressStream({
+				length: file.size,
+				time: 100
 			});
 
-			file.stream.pipe(response)
-				.on('finish', () => {
-					log('Download completed, killing process');
-					// Kill the process when download completed
-					process.exit(0);
-				});
+			progress.on('progress', p => {
+				frame = p;
+				emitter.emit('progress', p);
+			});
+
+			stream.on('end', () => {
+				sent = true;
+				emitter.emit('end')
+			});
+
+			stream
+				.pipe(progress)
+				.pipe(response);
 		});
 
 		server.on('error', reject);
+		server.listen(options.port, async () => {
+			options.spinner.succeed("Started server");
 
-		server.listen(options.port, () => {
-			resolve(server);
+			try {
+				connection = await connect();
+				resolve(connection);
+			} catch (err) {
+				reject(err);
+			}
 		});
 	});
 }
@@ -243,23 +301,49 @@ function serve(options) {
  * @param {File} file
  * @return {Promise<String>} - shareable address
  */
-function serveFile(file) {
-	return getOpenPort()
-		.then(port => {
-			const address = getLocalAddress();
-			const id = generate().dashed;
-			const options = {
-				address,
-				port,
-				id,
-				file
-			};
+async function serveFile(file, flags) {
+	const port = await getOpenPort();
+	const address = getLocalAddress();
+	const id = generate().dashed;
+	const subdomain = id.split('-').join('').slice(0, 20);
 
-			return serve(options)
-				.then(() => `http://${options.address}:${options.port}/${options.id}`)
-				.then(url => copy(`${url}`));
-		});
+	const options = {
+		address,
+		file,
+		id,
+		port,
+		spinner: flags.spinner,
+		subdomain,
+		tunnel: flags.tunnel,
+	};
+
+	const connection = await serve(options);
+	await copy(connection.url);
+
+	connection.help = [
+		' ',
+		`Download details:`,
+		` - URL:      ${connection.url}`,
+		` - SHA1:     ${file.checksum}`,
+		` - Password: ${file.password}`,
+		' '
+	];
+
+	return connection;
 }
+
+
+function tunnel(port, options) {
+	return new Promise((resolve, reject) => {
+		localtunnel(port, options, (error, connection) => {
+			if (error) {
+				return reject(error);
+			}
+			resolve(connection);
+		});
+	});
+}
+
 
 /**
  * Execute share-cli main procedure
@@ -268,40 +352,58 @@ function serveFile(file) {
  * @param {Object} args - flag arguments
  * @return {Promise<String>} - shareable address
  */
-function main(filePath, args) {
-	return new Promise((resolve, reject) => {
-		// Start the inactivity timer
-		setTimer();
+async function main(filePath, args) {
+	// Sanitize input
+	if (stdin.isTTY && typeof filePath === 'undefined') {
+		const error = new Error('Either stdin or [file] have to be given');
+		error.cli = true;
+		throw error;
+	}
 
-		// Sanitize input
-		if (stdin.isTTY && typeof filePath === 'undefined') {
-			const error = new Error('Either stdin or [file] have to be given');
-			error.cli = true;
-			return reject(error);
+	const isStdin = stdin.isTTY !== true && typeof filePath === 'undefined';
+	const spinner = ora().start();
+
+	// Get a file object
+	const file = await getFile({
+		fileName: args.name,
+		filePath,
+		isStdin,
+		password: args.password || encodeURIComponent((await randomBytes(48)).toString("hex")),
+		spinner,
+	});
+
+	const connection = await serveFile(file, {
+		spinner,
+		tunnel: args.tunnel !== false
+	});
+
+	const progress = progressString({width: 50, total: 100});
+
+	const help = `\n${connection.help.join('\n')}`;
+
+	spinner.text = `Awaiting download${help}`;
+	spinner.start();
+
+	connection.on('start', () => {
+		spinner.text = `Sending: [${progress(0)}] ${0}% ${help}`;
+	});
+
+	connection.on('progress', p => {
+		const percentage = Math.round(Math.round(p.percentage * 100) / 100);
+
+		if (percentage < 100) {
+			spinner.text = `Sending: [${progress(percentage)}] ${percentage}% ${help}`;
+		} else {
+			spinner.text = `Waiting for receiver ${help}`;
 		}
+	});
 
-		const isStdin = stdin.isTTY !== true && typeof filePath === 'undefined';
-
-		// Get a file object
-		const gettingFile = getFile({
-			isStdin,
-			filePath,
-			fileName: args.name
-		});
-
-		gettingFile
-			.then(serveFile)
-			.then(resolve)
-			.catch(reject);
+	connection.on('end', () => {
+		spinner.succeed(`Sent. End server with Ctrl+C. ${help}`);
 	});
 }
 
 main(cli.input[0], cli.flags)
-	.then(output => {
-		if (output) {
-			console.log(output);
-		}
-	})
 	.catch(error => {
 		if (error.cli) {
 			if (error.message) {
@@ -314,9 +416,3 @@ main(cli.input[0], cli.flags)
 			throw error;
 		});
 	});
-
-/**
- * @typedef {Object} File
- * @property {Stream} File.stream - Readstream of the file
- * @property {String} File.name - Basename of the file
- */
