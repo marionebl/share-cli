@@ -70,7 +70,7 @@ function copy(input) {
 	return new Promise((resolve, reject) => {
 		copyPaste.copy(`${input}\r\n`, (error) => {
 			if (error) {
-				console.warn(`Failed adding url to clipboard: ${err.message}`);
+				console.warn(`Failed adding url to clipboard: ${error.message}`);
 			}
 			resolve(input);
 		});
