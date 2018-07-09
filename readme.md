@@ -9,7 +9,7 @@
 
 # share-cli
 
-* :rocket: Dead dimple
+* :rocket: Dead simple
 * :sparkles: Just works
 * :lock: Encrypted files
 
